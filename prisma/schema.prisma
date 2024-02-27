@@ -1,0 +1,77 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator-markdown"
+  output   = "./ERD.md"
+}
+
+model PhoneNumber {
+  id          Int      @id @default(autoincrement())
+  phoneNumber String   @map("phone_number") @db.VarChar(16)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deleted     Boolean  @default(false)
+
+  @@map("phone_numbers")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  mac            String   @db.VarChar(255)
+  phoneNumber    String   @map("phone_number") @db.VarChar(16)
+  hostname       String?
+  firstSeen      DateTime @default(now()) @map("first_seen")
+  lastSeen       DateTime @default(now()) @map("last_seen")
+  lastDisconnect DateTime @default(now()) @map("last_disconnent")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deleted        Boolean  @default(false)
+
+  @@map("users")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("admins")
+}
+
+model Portal {
+  id        Int      @id @default(autoincrement())
+  key       String   @db.VarChar(2000)
+  keyAds    String   @map("key_ads") @db.VarChar(2000)
+  title     String   @db.VarChar(2000)
+  message   String   @db.VarChar(2000)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  @@map("portals")
+}
+
+model Hotspot {
+  id          Int      @id @default(autoincrement())
+  duration    String   @db.VarChar(255)
+  upSpeed     String   @map("up_speed") @db.VarChar(255)
+  downSpeed   String   @map("down_speed") @db.VarChar(255)
+  maxBytes    String   @map("max_bytes") @db.VarChar(255)
+  redirectUrl String   @map("redirect_url") @db.VarChar(2000)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deleted     Boolean  @default(false)
+
+  @@map("hotspots")
+}
